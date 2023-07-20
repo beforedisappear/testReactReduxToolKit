@@ -1,29 +1,30 @@
-import { useHttp } from "../../hooks/http.hook";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import classNames from "classnames";
-import store from '../../store';
 
-import { filtersChanged, fetchFilters, selectAll } from "./filtersSliceAdapter";
 import Spinner from "../spinner/Spinner";
 
+import { useDispatch, useSelector } from "react-redux";
+import { useGetFiltersQuery } from "../../api/apiSlice";
+
+import { filtersChanged } from "./filtersSliceAdapter";
+
 const HeroesFilters = () => {
-  const { filtersLoadingStatus, activeFilter } = useSelector(
+  const { activeFilter } = useSelector(
     (state) => state.filters
   );
-  // подход с созданием данного метода в слайсе не сработает
-  // поскольку нельзя импортировать store до его создания
-  const filters = selectAll(store.getState());
   const dispatch = useDispatch();
-  const { request } = useHttp();
 
-  useEffect(() => {
-    dispatch(fetchFilters());
-  }, []);
+  const {
+    data: filters = [],
+    isFetching,
+    isLoading,
+    isSuccess,
+    isError,
+    error,
+  } = useGetFiltersQuery();
 
-  if (filtersLoadingStatus === "loading") {
+  if (isLoading) {
     return <Spinner />;
-  } else if (filtersLoadingStatus === "error") {
+  } else if (isError) {
     return <h5 className="text-center mt-5">Ошибка загрузки</h5>;
   }
 

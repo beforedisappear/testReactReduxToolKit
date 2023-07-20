@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
-import heroes from "../components/heroesList/heroesSliceAdapter.js" // reducer from heroesSlice
-import filters from "../components/heroesFilters/filtersSliceAdapter.js" // reducer from filtersSlice
+import filters from "../components/heroesFilters/filtersSliceAdapter.js"; // reducer from filtersSlice
+import { apiSlise } from "../api/apiSlice.js";
 
 //middleware
 const stringMiddleware = () => (next) => (action) => {
@@ -14,40 +14,10 @@ const stringMiddleware = () => (next) => (action) => {
 
 //store
 const store = configureStore({
-  reducer: { heroes, filters },
-  middleware: getDefaultMiddleware => getDefaultMiddleware().concat(stringMiddleware),
+  reducer: { filters, [apiSlise.reducerPath]: apiSlise.reducer },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(stringMiddleware, apiSlise.middleware),
   devTools: process.env.NODE_ENV !== "production",
-
 });
 
 export default store;
-
-
- 
-
-// const enhancer =
-//   (createStore) =>
-//   (...args) => {
-//     const store = createStore(...args);
-//     //сохраняем оригинальный dispatch
-//     const oldDispatch = store.dispatch;
-//     //переопределяем dispatch нашего store
-//     store.dispatch = (action) => {
-//       //если приходит строка
-//       if (typeof action === "string") {
-//         return oldDispatch({
-//           type: action,
-//         });
-//       }
-//       return oldDispatch(action);
-//     };
-//     return store;
-//   };
-
-// const store = createStore(
-//   combineReducers({ heroes, filters }),
-//   compose(
-//     applyMiddleware(thunk, stringMiddleware),
-//     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-//   )
-// );

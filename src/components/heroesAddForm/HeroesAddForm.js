@@ -1,22 +1,7 @@
-// Задача для этого компонента:
-// Реализовать создание нового героя с введенными данными. Он должен попадать
-// в общее состояние и отображаться в списке + фильтроваться
-// Уникальный идентификатор персонажа можно сгенерировать через uiid
-// Усложненная задача:
-// Персонаж создается и в файле json при помощи метода POST
-// Дополнительно:
-// Элементы <option></option> желательно сформировать на базе
-// данных из фильтров
-
-import { useHttp } from "../../hooks/http.hook";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 
-//import { heroCreated } from "../../actions";
-import { heroCreated } from "../heroesList/heroesSliceAdapter";
-import { selectAll } from "../heroesFilters/filtersSliceAdapter";
-import store from "../../store";
+import { useCreateHeroMutation, useGetFiltersQuery } from "../../api/apiSlice";
 
 const HeroesAddForm = () => {
   // Состояния для контроля формы
@@ -24,20 +9,19 @@ const HeroesAddForm = () => {
   const [heroDescr, setHeroDescr] = useState("");
   const [heroElement, setHeroElement] = useState("");
 
-  const {filtersLoadingStatus } = useSelector(
-    (state) => state.filters
-  );
-  // подход с созданием данного метода в слайсе не сработает
-  // поскольку нельзя импортировать store до его создания
-  const filters = selectAll(store.getState());
-  const dispatch = useDispatch();
-  const { request } = useHttp();
+  const [createHero] = useCreateHeroMutation();
+
+  const {
+    data: filters = [],
+    isFetching,
+    isLoading,
+    isSuccess,
+    isError,
+    error,
+  } = useGetFiltersQuery();
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
-    // Можно сделать и одинаковые названия состояний,
-    // хотел показать вам чуть нагляднее
-    // Генерация id через библиотеку
     const newHero = {
       id: uuidv4(),
       name: heroName,
@@ -45,12 +29,7 @@ const HeroesAddForm = () => {
       element: heroElement,
     };
 
-    // Отправляем данные на сервер в формате JSON
-    // ТОЛЬКО если запрос успешен - отправляем персонажа в store
-    request("http://localhost:3001/heroes", "POST", newHero)
-      .then((res) => console.log(res, "Отправка успешна"))
-      .then(dispatch(heroCreated(newHero)))
-      .catch((err) => console.log(err));
+    createHero(newHero).unwrap();
 
     // Очищаем форму после отправки
     setHeroName("");
@@ -59,9 +38,9 @@ const HeroesAddForm = () => {
   };
 
   const renderFilters = (filters, status) => {
-    if (status === "loading") {
+    if (isLoading) {
       return <option>Загрузка элементов</option>;
-    } else if (status === "error") {
+    } else if (isError) {
       return <option>Ошибка загрузки</option>;
     }
 
@@ -69,7 +48,6 @@ const HeroesAddForm = () => {
     if (filters && filters.length > 0) {
       return filters.map(({ name, label }) => {
         // Один из фильтров нам тут не нужен
-        // eslint-disable-next-line
         if (name === "all") return;
 
         return (
@@ -128,7 +106,7 @@ const HeroesAddForm = () => {
           onChange={(e) => setHeroElement(e.target.value)}
         >
           <option value="">Я владею элементом...</option>
-          {renderFilters(filters, filtersLoadingStatus)}
+          {renderFilters(filters)}
         </select>
       </div>
 
