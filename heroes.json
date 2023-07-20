@@ -7,46 +7,51 @@
       "element": "fire"
     },
     {
-      "id": "e9d78982-dc54-4dc5-978a-ceb9bcb2dc71",
-      "name": "beforedisappear",
-      "description": "Roman",
+      "id": 2,
+      "name": "Неизвестный герой",
+      "description": "Скрывающийся в тени",
       "element": "wind"
     },
     {
-      "id": "2d0502fc-c874-42c6-8664-12db13be83f2",
-      "name": "roman23kl@gmail.com",
-      "description": "sdf",
+      "id": 3,
+      "name": "Морской герой",
+      "description": "Как аквамен, но не из DC",
       "element": "water"
     },
     {
-      "id": "67f29675-d543-4cd3-a6ee-ae60aae08ea5",
-      "name": "newuser",
-      "description": "223",
-      "element": "water"
+      "id": "d7bda30b-caf2-4c9f-8068-1355763d402a",
+      "name": "r",
+      "description": "r",
+      "element": "fire"
     }
   ],
   "filters": [
     {
+      "id": 1,
       "name": "all",
       "label": "Все",
       "className": "btn-outline-dark"
     },
     {
+      "id": 2,
       "name": "fire",
       "label": "Огонь",
       "className": "btn-danger"
     },
     {
+      "id": 3,
       "name": "water",
       "label": "Вода",
       "className": "btn-primary"
     },
     {
+      "id": 4,
       "name": "wind",
       "label": "Ветер",
       "className": "btn-success"
     },
     {
+      "id": 5,
       "name": "earth",
       "label": "Земля",
       "className": "btn-secondary"

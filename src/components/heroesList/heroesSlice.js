@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { useHttp } from "../../hooks/http.hook"; // доступ к функционалу запросов
 
 const initialState = {
@@ -13,9 +13,6 @@ export const fetchHeroes = createAsyncThunk("heroes/fecthHeroes", () => {
   return request("http://localhost:3001/heroes");
 });
 
-// request("http://localhost:3001/filters")
-// .then(data => dispatch(filtersFetched(data)))
-// .catch(() => dispatch(filtersFetchingError()))
 
 const heroesSlice = createSlice({
   name: "heroes",

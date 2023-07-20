@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
-import heroes from "../components/heroesList/heroesSlice.js" // reducer from heroesSlice
-import filters from "../components/heroesFilters/filtersSlice.js" // reducer from filtersSlice
+import heroes from "../components/heroesList/heroesSliceAdapter.js" // reducer from heroesSlice
+import filters from "../components/heroesFilters/filtersSliceAdapter.js" // reducer from filtersSlice
 
 //middleware
 const stringMiddleware = () => (next) => (action) => {

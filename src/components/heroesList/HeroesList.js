@@ -6,32 +6,22 @@ import { useCallback, useEffect } from "react";
 // redux
 import { useDispatch, useSelector } from "react-redux";
 
-import { heroDeleted, fetchHeroes } from "./heroesSlice";
+//import { heroDeleted, fetchHeroes } from "./heroesSlice";
+import { heroDeleted, fetchHeroes, selectAll } from "./heroesSliceAdapter";
+
+
 // hero
 import HeroesListItem from "../heroesListItem/HeroesListItem";
 import Spinner from "../spinner/Spinner";
 import "../heroesList/heroesList.scss";
-import { createSelector } from "@reduxjs/toolkit";
 
+import { filteredHeroesSelector } from "./heroesSliceAdapter";
 // При клике на "крестик" идет удаление персонажа из общего состояния
 // Усложненная задача:
 // Удаление идет и с json файла при помощи метода DELETE
 
 const HeroesList = () => {
-  // будет меморизирована (необходимо при получении стейтов из разных файлов)
-  const filteredHeroesSelector = createSelector(
-    (state) => state.filters.activeFilter,
-    (state) => state.heroes.heroes,
-    (filter, heroes) => {
-      if (filter === "all") {
-        console.log("render");
-        return heroes;
-      } else {
-        console.log("render");
-        return heroes.filter((item) => item.element === filter);
-      }
-    }
-  );
+  
   const filteredHeroes = useSelector(filteredHeroesSelector);
 
   // previous variant with re-rendering
